@@ -1,6 +1,8 @@
 # Copyright 2023 Lawrence Livermore National Security, LLC and other
 # Benchpark Project Developers. See the top-level COPYRIGHT file for details.
 #
+# Copyright 2013-2023 Spack Project Developers.
+#
 # SPDX-License-Identifier: Apache-2.0
 
 import os
@@ -20,7 +22,7 @@ def system_init(args):
 
     if args.basedir:
         base = args.basedir
-        sysdir = system.system_id()
+        sysdir = system.system_uid()
         destdir = os.path.join(base, sysdir)
     elif args.dest:
         destdir = args.dest
