@@ -23,15 +23,14 @@ class Smb(MakefilePackage):
     #build_targets=["mpi_overhead", "msgrate"]
     def edit(self, spec, prefix):
         if "+rma" in spec:
-            
             makefile = FileFilter("src/rma_mt_mpi/Makefile")
-            makefile.filter('CC = cc', "CC = {0}".format(spec["mpi"].mpicc))
+            makefile.filter('CC=cc', "CC = {0}".format(spec["mpi"].mpicc))
     #TODO: fix rma variant for msgrate workload and add shm variant
     def build(self, spec, prefix):
-        #if "+rma" in spec: 
-        self.build_directory.append("src/rma_mt_mpi")
-        #else:
-        self.build_directory.append("src/msgrate")
+        if "+rma" in spec: 
+            self.build_directory.append("src/rma_mt_mpi")
+        else:
+            self.build_directory.append("src/msgrate")
 
         for path in self.build_directory:
             with fs.working_dir(path):
@@ -40,9 +39,9 @@ class Smb(MakefilePackage):
         mkdir(prefix.bin)
         mkdir(prefix.doc)
         install("src/mpi_overhead/mpi_overhead", prefix.bin)
-        #if "+rma" in spec:
-        install("src/rma_mt_mpi/msgrate", prefix.bin)
-        #else:
-        install("src/msgrate/msgrate", prefix.bin)
         install("src/mpi_overhead/README", prefix.doc)
-        install("src/msgrate/README", prefix.doc)
+        if "+rma" in spec:
+            install("src/rma_mt_mpi/msgrate", prefix.bin)
+        else:
+            install("src/msgrate/msgrate", prefix.bin)
+            install("src/msgrate/README", prefix.doc)
