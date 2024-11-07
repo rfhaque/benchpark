@@ -20,12 +20,11 @@ class Smb(MakefilePackage):
     depends_on("mpi", when="+mpi")
     build_directory = ["src/mpi_overhead"]
     
-    #build_targets=["mpi_overhead", "msgrate"]
     def edit(self, spec, prefix):
         if "+rma" in spec:
             makefile = FileFilter("src/rma_mt_mpi/Makefile")
             makefile.filter('CC=cc', "CC = {0}".format(spec["mpi"].mpicc))
-    #TODO: fix rma variant for msgrate workload and add shm variant
+    #TODO: add shm variant
     def build(self, spec, prefix):
         if "+rma" in spec: 
             self.build_directory.append("src/rma_mt_mpi")

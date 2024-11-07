@@ -14,19 +14,20 @@ class Smb(ExecutableApplication):
 
     executable('p1', 'mpi_overhead -v', use_mpi=True)
     executable('p2', 'msgrate -n {ppn}', use_mpi=True)
-    #executable('p3', 'mpiGraph', use_mpi=True)
+
     workload('mpi_overhead', executables=['p1'])
     workload('msgrate', executables=['p2'])
+    workload('rma_mt', executables=['p2'])
 
     workload_variable('ppn', default='1',
                    description='Number of procs per node',
-                   workloads=['msgrate'])
-    #TODO: Figure out FOMs
+                   workloads=['msgrate', 'rma_mt'])
+
     figure_of_merit('single direction',
                    log_file='{experiment_run_dir}/{experiment_name}.out',
                    fom_regex=r'single direction:\s+(?P<fom>[0-9]+\.[0-9]*)',
                   group_name='fom', units='')
-    #TODO:fix this one. Not sure what's causing it to not detect
+    #TODO:fix this FOM. Not sure what's causing it to not detect
     figure_of_merit('overhead',
                     log_file='{experiment_run_dir}/{experiment_name}.out',
                     fom_regex=r'(?:[0-9]+\.?[0-9]* +){4}(?P<fom>[0-9]+\.[0-9]*)',

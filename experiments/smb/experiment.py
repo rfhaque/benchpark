@@ -34,8 +34,6 @@ class Smb(Experiment, StrongScaling):
         # get package version
         app_version = self.spec.variants["version"][0]
 
-        # get system config options
-        # TODO: Get compiler/mpi/package handles directly from system.py
         spec_string=f"smb@{app_version} +mpi"
         if self.spec.satisfies("workload=rma_mt"):
             spec_string+="+rma"
