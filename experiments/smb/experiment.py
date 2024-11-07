@@ -7,7 +7,6 @@ from benchpark.directives import variant
 from benchpark.experiment import Experiment
 from benchpark.scaling import StrongScaling
 
-
 class Smb(Experiment, StrongScaling):
     variant(
         "workload",
@@ -31,7 +30,6 @@ class Smb(Experiment, StrongScaling):
             self.add_experiment_variable("n_nodes", "1")
             self.add_experiment_variable("n_ranks", "{n_nodes}*{sys_cores_per_node}")
 
-
     def compute_spack_section(self):
         # get package version
         app_version = self.spec.variants["version"][0]
@@ -45,5 +43,4 @@ class Smb(Experiment, StrongScaling):
         
         # empty package_specs value implies external package
         self.add_spack_spec(system_specs["mpi"])
-        
         self.add_spack_spec(self.name, [spec_string, system_specs["compiler"]])
