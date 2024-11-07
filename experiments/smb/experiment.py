@@ -39,6 +39,6 @@ class Smb(Experiment, StrongScaling):
             spec_string += "+rma"
         system_specs = {}
         system_specs["compiler"] = "default-compiler"
-        system_specs["mpi"] = "default-mpi" 
+        system_specs["mpi"] = "default-mpi"
         self.add_spack_spec(system_specs["mpi"])
         self.add_spack_spec(self.name, [spec_string, system_specs["compiler"]])
