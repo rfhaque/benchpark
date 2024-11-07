@@ -26,7 +26,7 @@ class Smb(Experiment, StrongScaling):
         if self.spec.satisfies("workload=mpi_overhead"):
             self.add_experiment_variable("n_ranks", "2")
         elif self.spec.satisfies("workload=msgrate") or self.spec.satisfies(
-                "workload=rma_mt"
+            "workload=rma_mt"
         ):
             self.add_experiment_variable("n_nodes", "1")
             self.add_experiment_variable("n_ranks", "{n_nodes}*{sys_cores_per_node}")
