@@ -7,6 +7,7 @@ from benchpark.directives import variant
 from benchpark.experiment import Experiment
 from benchpark.scaling import StrongScaling
 
+
 class Smb(Experiment, StrongScaling):
     variant(
         "workload",
