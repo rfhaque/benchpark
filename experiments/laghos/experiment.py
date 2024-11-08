@@ -56,7 +56,9 @@ class Laghos(
             for pk, pv in scaled_variables.items():
                 self.add_experiment_variable(pk, pv, True)
 
-        self.add_experiment_variable("n_ranks", "{sys_cores_per_node} * {n_nodes}", True)
+        self.add_experiment_variable(
+            "n_ranks", "{sys_cores_per_node} * {n_nodes}", True
+        )
 
     def compute_spack_section(self):
         # get package version
@@ -71,7 +73,7 @@ class Laghos(
         # set package spack specs
         # empty package_specs value implies external package
         self.add_spack_spec(system_specs["mpi"])
-        #self.add_spack_spec(system_specs["blas"])
+        # self.add_spack_spec(system_specs["blas"])
 
         self.add_spack_spec(
             self.name, [f"laghos@{app_version} +metis", system_specs["compiler"]]
