@@ -47,5 +47,7 @@ packages:
     - spec: python@3.8.2
       prefix: /usr/tce/packages/python/python-3.8.2
       buildable: false
-  mpi:
+      mpi:
     buildable: false
+  zlib-api:                                                                     
+      require: zlib
