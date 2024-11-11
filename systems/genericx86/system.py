@@ -40,6 +40,6 @@ software:
       pkg_spec: gcc
     default-mpi:
       pkg_spec: openmpi
-    zlib-api:                                                                     
+    zlib-api:
       require: zlib
 """
