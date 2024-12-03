@@ -421,6 +421,18 @@ jobs:
             --disable-logger \
             workspace setup --dry-run
 
+      - name: Dry run dynamic qws/openmp with dynamic CTS ruby
+        run: |
+          system_id=$(./bin/benchpark system id ./ruby-system)
+          ./bin/benchpark experiment init --dest qws-openmp qws +openmp
+          ./bin/benchpark setup qws-openmp ./ruby-system workspace/
+          . workspace/setup.sh
+          ramble \
+            --workspace-dir workspace/qws-openmp/$system_id/workspace \
+            --disable-progress-bar \
+            --disable-logger \
+            workspace setup --dry-run
+
       - name: Dry run dynamic saxpy/openmp with dynamic fugaku
         run: |
           ./bin/benchpark system init --dest=fugaku-system fugaku
