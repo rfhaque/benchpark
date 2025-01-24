@@ -661,18 +661,6 @@ jobs:
             --disable-logger \
             workspace setup --dry-run
 
-      - name: Dry run dynamic genesis/openmp with dynamic fugaku
-        run: |
-          system_id=$(./bin/benchpark system id ./fugaku-system)
-          ./bin/benchpark experiment init --dest=genesis-openmp-fugaku genesis+openmp
-          ./bin/benchpark setup ./genesis-openmp-fugaku ./fugaku-system workspace/
-          . workspace/setup.sh
-          ramble \
-            --workspace-dir workspace/genesis-openmp-fugaku/$system_id/workspace \
-            --disable-progress-bar \
-            --disable-logger \
-            workspace setup --dry-run
-
       - name: Dry run dynamic genesis/openmp with dynamic CTS ruby
         run: |
           system_id=$(./bin/benchpark system id ./ruby-system)
@@ -685,38 +673,88 @@ jobs:
             --disable-logger \
             workspace setup --dry-run
 
-      - name: Dry run dynamic babelstream/openmp with dynamic CTS tioga
+      - name: Dry run dynamic genesis/openmp with dynamic fugaku
         run: |
-          ./bin/benchpark experiment init --dest=babelstream-tioga babelstream +openmp
-          ./bin/benchpark setup ./babelstream-tioga ./tioga-system workspace/
-          system_id=$(./bin/benchpark system id ./tioga-system)
+          system_id=$(./bin/benchpark system id ./fugaku-system)
+          ./bin/benchpark experiment init --dest=genesis-openmp-fugaku genesis+openmp
+          ./bin/benchpark setup ./genesis-openmp-fugaku ./fugaku-system workspace/
           . workspace/setup.sh
           ramble \
-            --workspace-dir "workspace/babelstream-tioga/$system_id/workspace" \
+            --workspace-dir workspace/genesis-openmp-fugaku/$system_id/workspace \
             --disable-progress-bar \
             --disable-logger \
             workspace setup --dry-run
+  dynamicdryrunexperiments:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout Benchpark
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
 
-      - name: Dry run dynamic babelstream/openmp with dynamic CTS sierra 
+      - name: Add needed Python libs
         run: |
-          ./bin/benchpark experiment init --dest=babelstream-sierra babelstream +openmp
-          ./bin/benchpark setup ./babelstream-sierra ./sierra-system1 workspace/
-          system_id=$(./bin/benchpark system id ./sierra-system1)
-          . workspace/setup.sh
-          ramble \
-            --workspace-dir "workspace/babelstream-sierra/$system_id/workspace" \
-            --disable-progress-bar \
-            --disable-logger \
-            workspace setup --dry-run
+          pip install -r ./requirements.txt
 
-      - name: Dry run dynamic babelstream/openmp with dynamic CTS ruby
-        run: |
-          ./bin/benchpark experiment init --dest=babelstream babelstream +openmp
-          ./bin/benchpark setup ./babelstream ./ruby-system workspace/
-          system_id=$(./bin/benchpark system id ./ruby-system)
-          . workspace/setup.sh
-          ramble \
-            --workspace-dir "workspace/babelstream/$system_id/workspace" \
-            --disable-progress-bar \
-            --disable-logger \
-            workspace setup --dry-run
+      - uses: ./.github/workflows/dynamic-dry-run-template.yml
+        with:
+          benchmark_name: saxpy
+          benchmark_mode: openmp
+          benchmark_spec: saxpy+openmp
+          system_name: ruby
+          system_spec: llnl-cluster cluster=ruby compiler=intel
+          name_suffix: intel compiler
+
+      - uses: ./.github/workflows/dynamic-dry-run-template.yml
+        with:
+          benchmark_name: saxpy
+          benchmark_mode: openmp
+          benchmark_spec: saxpy+openmp
+          system_name: dane
+          system_spec: llnl-cluster cluster=dane
+
+      - uses: ./.github/workflows/dynamic-dry-run-template.yml
+        with:
+          benchmark_name: saxpy
+          benchmark_mode: openmp
+          benchmark_spec: saxpy+openmp
+          system_name: magma
+          system_spec: llnl-cluster cluster=magma
+
+      - uses: ./.github/workflows/dynamic-dry-run-template.yml
+        with:
+          benchmark_name: saxpy
+          benchmark_mode: openmp
+          benchmark_spec: saxpy+openmp
+          system_name: aws
+          system_spec: aws-pcluster instance_type=hpc6a.48xlarge
+
+      - uses: ./.github/workflows/dynamic-dry-run-template.yml
+        with:
+          benchmark_name: saxpy
+          benchmark_mode: openmp
+          benchmark_spec: saxpy+openmp
+          system_name: venado
+          system_spec: lanl-venado cuda=12.5 compiler=cce +gtl
+
+      - uses: ./.github/workflows/dynamic-dry-run-template.yml
+        with:
+          benchmark_name: saxpy
+          benchmark_mode: cuda
+          benchmark_spec: saxpy+cuda
+          system_name: lassen
+          system_spec: llnl-sierra cuda=10-1-243 compiler=xl
+
+      - uses: ./.github/workflows/dynamic-dry-run-template.yml
+        with:
+          benchmark_name: saxpy
+          benchmark_mode: cuda
+          benchmark_spec: saxpy+cuda
+          system_name: venado
+          system_spec: lanl-venado cuda=12.5 compiler=cce +gtl
+
+      - uses: ./.github/workflows/dynamic-dry-run-template.yml
+        with:
+          benchmark_name: saxpy
+          benchmark_mode: rocm
+          benchmark_spec: saxpy+rocm
+          system_name: tioga
+          system_spec: llnl-elcapitan rocm=5.5.1 compiler=cce ~gtl
